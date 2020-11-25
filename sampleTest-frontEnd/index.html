@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+  <title>Sample Test</title>
+  <link rel="stylesheet" href="index.css"/>
+  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet"/>
+  <link rel="stylesheet" type="text/css" href="https://bootswatch.com/4/yeti/bootstrap.min.css"/>
+  
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css"
+    integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous"/>
+</head>
+
+<body>
+  <div class="container mt-4">
+  <form action="#" method="POST">
+    <h1>SIGN UP</h1>
+    <div class="icon">
+      <i class="fas fa-user-circle"></i>
+    </div>
+      
+            <div class="form-group">
+              <label for="name"><strong>Author Name</strong></label>
+              <input type="text"  placeholder="Enter Fullname" name="name" id="name" required="required"/>
+          </div>
+          <div class="form-group">
+            <label for="email"><strong>E-mail</strong></label>
+            <input type="text"  placeholder="Enter E-mail" name="email" id="email" required="required"/>
+          </div>
+
+            <div class="form-group">
+            <label for="bookName"><strong>Book Name</strong></label>
+            <input type="text"  placeholder="Enter Book Name" name="bookName" id="book" required="required"/>
+          </div>
+            <div class="form-group">
+            <label for="pages"><strong>Number of Pages</strong></label>
+            <input type="text" placeholder="Number of Pages" name="pages" id="pages" required="required"/>
+          </div>
+      
+      <button id= "btn" type="submit"><strong>SIGN UP</strong></button>
+  </form>
+</div>
+  <script>
+    document.getElementById("btn").addEventListener("click", event => {
+      let name = document.getElementById('name').value;
+      let email= document.getElementById('email').value;
+      let bookName = document.getElementById('book').value;
+      let pages= document.getElementById('pages').value;
+
+      if(name != "" && email != "" && bookName != "" && pages != ""){
+        event.preventDefault();
+        var body = JSON.stringify({
+        name: document.getElementById('name').value,
+        email: document.getElementById('email').value,
+        bookName: document.getElementById('book').value,
+        pages: document.getElementById('pages').value
+      });
+      console.log(body)
+      fetch('http://localhost:4000/api/authors/add', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body
+      })
+        .then(function (data) {
+          // Here you get the data to modify as you please
+          if (data.message == 'success') {
+            let msg = document.getElementById('name').value = "Operation Successful"
+          }
+          console.log(data);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+
+      }
+      // alert(document.getElementById('name').value);  
+    });
+
+  </script>
+</body>
+
+</html>

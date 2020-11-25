@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Sample Test</title>
+        <link rel="stylesheet" href="index.css">
+        <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
+        <link rel="stylesheet" type="text/css" href="https://bootswatch.com/4/yeti/bootstrap.min.css">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css"
+          integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
+      </head>
+      <body>
+          <div class="container mt-4">
+                <form action="#" method="GET">
+                    <div class="form-group">
+                            <label for="name"><strong>Name</strong></label>
+                            <input type="text" value="" placeholder="name" name="name" id="searchByName" required>
+                            <span id="details"></span>
+                        <button id="btn" type="submit"><strong>ENTER</strong></button>
+                    </div>
+                </form>
+                <p id="demo"></p>
+                <table class="table table-striped mt-5">
+                    <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Name</th>
+                            <th>email</th>
+                            <th>bookName</th>
+                            <th>pages</th>
+                        </tr>
+                    </thead>
+                    <tbody id="book-list"></tbody>
+                </table>
+
+        </div>
+          <script>
+              document.getElementById("btn").addEventListener("click", event => {
+                  // Delete rows
+                  console.log('rabne');
+                  var table = document.getElementById("book-list");
+                  
+                  var searchName = document.getElementById("searchByName").value;
+                  console.log(searchName);
+                  while(table.rows[0]) table.deleteRow(0);
+                  //let name = document.getElementById("name").value;
+                  if(searchName != ""){
+                    event.preventDefault();
+                  var body = document.getElementById("searchByName").value
+                  fetch(`http://localhost:4000/api/authors/search/:${searchName}`, {
+                        method: 'GET',
+                        headers: {
+                        'Content-Type': 'application/json'
+                        },       
+                    })
+                    .then(res => {
+                    return res.json()
+                    })
+                    .then(function(data) {
+                    // Here you get the data to modify as you please
+                        console.log(data);
+                        for( var i = 0; i < data.length; i++ )
+                        {
+                            var tbody = document.getElementById("book-list")
+                            var o = data[i];
+                            var tr =  document.createElement("tr");
+                            tbody.appendChild(tr);
+                            
+
+                            var td = document.createElement("td");
+                            td.appendChild(document.createTextNode(o.id));
+                            tr.appendChild(td); 
+
+                            var td = document.createElement("td");
+                            td.appendChild(document.createTextNode(o.name));
+                            tr.appendChild(td); 
+
+                            var td = document.createElement("td");
+                            td.appendChild(document.createTextNode(o.email));
+                            tr.appendChild(td);
+
+                            var td = document.createElement("td");
+                            td.appendChild(document.createTextNode(o.bookName));
+                            tr.appendChild(td);
+
+                            var td = document.createElement("td");
+                            td.appendChild(document.createTextNode(o.pages));
+                            tr.appendChild(td);
+                        }
+                        var count = Object.keys(data).length;
+                        console.log(count);
+                        document.getElementById("demo").innerHTML = `${count} rows found`;
+                    })
+                    .catch(function(error) {
+                        document.getElementById("demo").innerHTML = `No record found`;
+                    });
+                  }
+                  
+              })
+          </script>
+        </body>
+</html>
